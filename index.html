@@ -127,12 +127,6 @@ function playSong(i) {
   updateMediaSession(song, currentAlbum);
 }
 
-  audio.src = song.file;
-  audio.play();
-
-  updateMediaSession(song, currentAlbum);
-}
-  
 function updateMediaSession(song) {
   if (!('mediaSession' in navigator)) return;
 
@@ -194,16 +188,20 @@ audio.addEventListener("pause", () => {
   document.getElementById("playPauseBtn").innerText = "▶️ Play";
 });
 
+const audio = document.getElementById("audio");
+
 audio.addEventListener("ended", () => {
   if (!currentAlbum) return;
 
-  if (currentIndex < currentAlbum.songs.length - 1) {
-    playSong(currentIndex + 1);
+  const next = currentIndex + 1;
+
+  if (next < currentAlbum.songs.length) {
+    playSong(next);
   } else {
-    playSong(0); // loops album
+    playSong(0); // remove this line if you DON'T want looping
   }
 });
-  
+
 </script>
 
 </body>
