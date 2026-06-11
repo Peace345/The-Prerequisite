@@ -114,11 +114,15 @@ function buildSongs() {
 
 // PLAY SONG
 function playSong(i) {
-  const song = currentAlbum.songs[i];
+  currentIndex = i;
 
+  const song = currentAlbum.songs[i];
   const audio = document.getElementById("audio");
+
   audio.src = song.file;
   audio.play();
+
+  updateMediaSession(song, currentAlbum);
 }
   
 function updateMediaSession(song) {
