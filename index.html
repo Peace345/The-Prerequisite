@@ -119,8 +119,8 @@ function playSong(i) {
   currentIndex = i;
 
   const song = currentAlbum.songs[i];
-  const audio = document.getElementById("audio");
 
+  const audio = document.getElementById("audio");
   audio.src = song.file;
   audio.play();
 
@@ -191,14 +191,16 @@ audio.addEventListener("pause", () => {
 const audio = document.getElementById("audio");
 
 audio.addEventListener("ended", () => {
+  console.log("SONG ENDED"); // debug check
+
   if (!currentAlbum) return;
 
-  const next = currentIndex + 1;
+  const nextIndex = currentIndex + 1;
 
-  if (next < currentAlbum.songs.length) {
-    playSong(next);
+  if (nextIndex < currentAlbum.songs.length) {
+    playSong(nextIndex);
   } else {
-    playSong(0); // remove this line if you DON'T want looping
+    playSong(0); // remove if you don't want looping
   }
 });
 
