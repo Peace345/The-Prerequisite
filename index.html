@@ -121,13 +121,11 @@ function playSong(i) {
   const song = currentAlbum.songs[i];
   const audio = document.getElementById("audio");
 
-  audio.addEventListener("ended", () => {
-  if (currentIndex < currentAlbum.songs.length - 1) {
-    playSong(currentIndex + 1);
-  } else {
-    playSong(0);
-  }
-});
+  audio.src = song.file;
+  audio.play();
+
+  updateMediaSession(song, currentAlbum);
+}
 
   audio.src = song.file;
   audio.play();
@@ -194,6 +192,16 @@ function togglePlay() {
 
 audio.addEventListener("pause", () => {
   document.getElementById("playPauseBtn").innerText = "▶️ Play";
+});
+
+audio.addEventListener("ended", () => {
+  if (!currentAlbum) return;
+
+  if (currentIndex < currentAlbum.songs.length - 1) {
+    playSong(currentIndex + 1);
+  } else {
+    playSong(0); // loops album
+  }
 });
   
 </script>
