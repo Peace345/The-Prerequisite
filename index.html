@@ -120,20 +120,16 @@ function playSong(i) {
   audio.src = song.file;
   audio.play();
 }
-
-  function updateMediaSession(song, album) {
+  
+function updateMediaSession(song) {
   if (!('mediaSession' in navigator)) return;
 
   navigator.mediaSession.metadata = new MediaMetadata({
     title: song.title,
     artist: song.artist,
-    album: album?.name || "",
+    album: currentAlbum.name,
     artwork: [
-      {
-        src: album?.cover || "",
-        sizes: "512x512",
-        type: "image/png"
-      }
+      { src: currentAlbum.cover, sizes: "512x512", type: "image/jpg" }
     ]
   });
 
@@ -146,18 +142,18 @@ function playSong(i) {
   });
 
   navigator.mediaSession.setActionHandler("previoustrack", () => {
-    if (currentIndex > 0) {
-      playSong(currentIndex - 1);
-    }
+    if (!currentAlbum) return;
+    currentIndex = (currentIndex - 1 + currentAlbum.songs.length) % currentAlbum.songs.length;
+    playSong(currentIndex);
   });
 
   navigator.mediaSession.setActionHandler("nexttrack", () => {
-    if (currentIndex < currentAlbum.songs.length - 1) {
-      playSong(currentIndex + 1);
-    }
+    if (!currentAlbum) return;
+    currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
+    playSong(currentIndex);
   });
 }
-
+  
 </script>
 
 </body>
