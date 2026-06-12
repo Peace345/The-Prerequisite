@@ -127,13 +127,6 @@ function playSong(i) {
   updateMediaSession(song, currentAlbum);
 }
 
-audio.addEventListener("ended", () => {
-  if (!currentAlbum) return;
-
-  currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
-  playSong(currentIndex);
-});
-
 function updateMediaSession(song) {
   if (!('mediaSession' in navigator)) return;
 
@@ -195,6 +188,22 @@ audio.addEventListener("pause", () => {
   document.getElementById("playPauseBtn").innerText = "▶️ Play";
 });
 
+const audio = document.getElementById("audio");
+
+audio.addEventListener("ended", () => {
+  console.log("SONG ENDED"); // debug check
+
+  if (!currentAlbum) return;
+
+  const nextIndex = currentIndex + 1;
+
+  if (nextIndex < currentAlbum.songs.length) {
+    playSong(nextIndex);
+  } else {
+    playSong(0); // remove if you don't want looping
+  }
+});
+  
 </script>
 
 </body>
