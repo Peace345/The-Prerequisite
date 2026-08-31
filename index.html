@@ -128,48 +128,51 @@ function playSong(i) {
 }
 
 function updateMediaSession(song) {
-  if (!('mediaSession' in navigator)) return;
+  if (!("mediaSession" in navigator)) return;
 
   navigator.mediaSession.metadata = new MediaMetadata({
     title: song.title,
-    artist: song.artist,
+    artist: song.artist || "",
     album: currentAlbum.name,
     artwork: [
-      { src: currentAlbum.cover, sizes: "512x512", type: "image/jpg" }
+      {
+        src: currentAlbum.cover,
+        sizes: "512x512",
+        type: "image/jpeg"
+      }
     ]
   });
 
-  navigator.mediaSession.setActionHandler("play", () => {
-    audio.play();
+  navigator.mediaSession.setActionHandler("play", async () => {
+    try {
+      await window.audio.play();
+    } catch (error) {
+      console.log("Media Session play failed:", error);
+    }
   });
 
   navigator.mediaSession.setActionHandler("pause", () => {
-    audio.pause();
+    window.audio.pause();
   });
 
   navigator.mediaSession.setActionHandler("previoustrack", () => {
     if (!currentAlbum) return;
-    currentIndex = (currentIndex - 1 + currentAlbum.songs.length) % currentAlbum.songs.length;
+
+    currentIndex =
+      (currentIndex - 1 + currentAlbum.songs.length) %
+      currentAlbum.songs.length;
+
     playSong(currentIndex);
   });
 
   navigator.mediaSession.setActionHandler("nexttrack", () => {
     if (!currentAlbum) return;
-    currentIndex = (currentIndex + 1) % currentAlbum.songs.length;
+
+    currentIndex =
+      (currentIndex + 1) % currentAlbum.songs.length;
+
     playSong(currentIndex);
   });
-}
-
-  if ("mediaSession" in navigator) {
-
-  navigator.mediaSession.setActionHandler("play", async () => {
-    await audio.play();
-  });
-
-  navigator.mediaSession.setActionHandler("pause", () => {
-    audio.pause();
-  });
-
 }
 
 function togglePlay() {
